@@ -18,6 +18,7 @@
 #include "screen.h"
 #include "spells.h"
 #include "handler.h"
+#include "extern_api.h"
 
 extern struct time_data time_info;
 extern struct room_data *world;
