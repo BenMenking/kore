@@ -22,6 +22,13 @@
 #include "screen.h"
 #include "olc.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 /* externs */
 extern int circle_restrict;
 extern int mini_mud;
@@ -60,6 +67,9 @@ extern struct title_type titles[NUM_CLASSES][LVL_IMPL + 1];
 /* HACKED to show experience needed on the prompt */
 /* extern int experience_table[LVL_IMPL + 1]; */
 /* end of hack */
+
+int pipe_out = 0;
+char * default_fifo = "/var/run/mud/webhook.pid";
 
 /* functions in this file */
 int get_from_q(struct txt_q * queue, char *dest, int *aliased);
@@ -109,8 +119,6 @@ void perform_pulse_functions(void);
 void perform_all_search(void);
 void auction_update(void);
 
-
-
 /* *********************************************************************
 *  main game loop and related stuff                                    *
 ********************************************************************* */
@@ -122,7 +130,6 @@ int main(int argc, char **argv)
   int pos = 1;
   char *dir;
 
-
   port = DFLT_PORT;
   dir = DFLT_DIR;
 
@@ -130,12 +137,12 @@ int main(int argc, char **argv)
     switch (*(argv[pos] + 1)) {
     case 'd':
       if (*(argv[pos] + 2))
-	dir = argv[pos] + 2;
+        dir = argv[pos] + 2;
       else if (++pos < argc)
-	dir = argv[pos];
+        dir = argv[pos];
       else {
-	log("Directory arg expected after option -d.");
-	exit(1);
+        log("Directory arg expected after option -d.");
+        exit(1);
       }
       break;
     case 'm':
@@ -181,7 +188,11 @@ int main(int argc, char **argv)
   sprintf(buf, "Using %s as data directory.", dir);
   log(buf);
 
+  setup_pipe();
+
   init_game(port);
+
+  close(pipe_out);
 
   return 0;
 }
@@ -196,7 +207,7 @@ void init_game(int port)
 
   my_srand(time(0));
 
-  log("Opening mother connection.");
+  log("Opening mother connection.");kjl
   mother_desc = init_socket(port);
 
   avail_descs = get_avail_descs();
@@ -1920,4 +1931,18 @@ void act(char *str, int hide_invisible, struct char_data * ch,
           perform_act(str, ch, obj, vict_obj, to);
       }
   MOBTrigger = TRUE;
+}
+
+/*
+ * setup_pipe
+ * 
+ * create a named pipe to support sending information to external program
+ */
+void setup_pipe() {
+  mkfifo(default_fifo, 0666);
+  pipe_out = open(default_fifo, O_RDWR);
+}
+
+void postMessage(char *msg) {
+  write(pipe_out, msg, strlen(msg)+1);
 }

@@ -170,8 +170,14 @@ int touch(char *path)
  */
 void mudlog(char *str, char type, sbyte level, byte file)
 {
+  char buf[1024];
+
   /* All this code is now in arealog() */
   arealog(str, type, level, file, -1);
+
+
+  sprintf(buf, "{ \"message\": \"%s\", \"type\": \"%c\", \"level\": \"%X\" }\n", str, type, level);
+  postMessage(buf);
 #if(0)
   char buf[MAX_STRING_LENGTH];
   extern struct descriptor_data *descriptor_list;
