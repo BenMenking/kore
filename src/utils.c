@@ -176,7 +176,7 @@ void mudlog(char *str, char type, sbyte level, byte file)
   arealog(str, type, level, file, -1);
 
 
-  sprintf(buf, "{ \"message\": \"%s\", \"type\": \"%c\", \"level\": \"%X\" }\n", str, type, level);
+  sprintf(buf, "{ \"message\": \"%s\", \"type\": \"%c\", \"level\": %d, \"is_file\": %d }\n", str, type, level, file);
   postMessage(buf);
 #if(0)
   char buf[MAX_STRING_LENGTH];
