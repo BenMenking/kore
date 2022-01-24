@@ -12,7 +12,7 @@
  * @brief Set the up pipe object
  * 
  */
-void setup_pipe();
+void setup_pipes();
 
 /**
  * @brief post a message to the webhook pipe
@@ -26,3 +26,9 @@ int postMessage(char *);
  * 
  */
 int getMessage(char *, int);
+
+/**
+ * @brief 
+ * 
+ */
+void teardown_pipes();
