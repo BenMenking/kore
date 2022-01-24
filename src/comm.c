@@ -118,9 +118,7 @@ void perform_scripts(void);
 void perform_pulse_functions(void);
 void perform_all_search(void);
 void auction_update(void);
-/* webhooks stuff */
-void setup_pipe();
-void postMessage(char *);
+
 
 /* *********************************************************************
 *  main game loop and related stuff                                    *
