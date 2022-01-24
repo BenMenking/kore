@@ -181,8 +181,3 @@ int socket(int domain, int type, int protocol);
 #endif
 
 #endif /* #ifdef __COMM_C__ */
-
-/* webhook stuff */
-/* webhooks stuff */
-void setup_pipe();
-void postMessage(char *);

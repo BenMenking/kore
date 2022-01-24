@@ -156,3 +156,6 @@ src/Makefile.in
 src/conf.h
 src/conf.h.in
 src/stamp-h1
+
+# editor related stuffs
+.vscode/*

@@ -21,13 +21,7 @@
 #include "house.h"
 #include "screen.h"
 #include "olc.h"
-
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "extern_api.h"
 
 /* externs */
 extern int circle_restrict;
@@ -67,9 +61,6 @@ extern struct title_type titles[NUM_CLASSES][LVL_IMPL + 1];
 /* HACKED to show experience needed on the prompt */
 /* extern int experience_table[LVL_IMPL + 1]; */
 /* end of hack */
-
-int pipe_out = 0;
-char * default_fifo = "/var/run/mud/webhook.pid";
 
 /* functions in this file */
 int get_from_q(struct txt_q * queue, char *dest, int *aliased);
@@ -189,11 +180,11 @@ int main(int argc, char **argv)
   sprintf(buf, "Using %s as data directory.", dir);
   log(buf);
 
-  setup_pipe();
+  setup_pipes();
 
   init_game(port);
 
-  close(pipe_out);
+  teardown_pipes();
 
   return 0;
 }
@@ -1932,18 +1923,4 @@ void act(char *str, int hide_invisible, struct char_data * ch,
           perform_act(str, ch, obj, vict_obj, to);
       }
   MOBTrigger = TRUE;
-}
-
-/*
- * setup_pipe
- * 
- * create a named pipe to support sending information to external program
- */
-void setup_pipe() {
-  mkfifo(default_fifo, 0666);
-  pipe_out = open(default_fifo, O_RDWR);
-}
-
-void postMessage(char *msg) {
-  write(pipe_out, msg, strlen(msg)+1);
 }
