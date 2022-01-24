@@ -22,6 +22,7 @@ __top_builddir__bin_circle_SOURCES=\
 	creation.c \
 	db.c \
 	dshop.c \
+	extern_api.c \
 	fight.c \
 	foldarea.c \
 	graph.c \
