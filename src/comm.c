@@ -118,6 +118,9 @@ void perform_scripts(void);
 void perform_pulse_functions(void);
 void perform_all_search(void);
 void auction_update(void);
+/* webhooks stuff */
+void setup_pipe();
+void postMessage(char *);
 
 /* *********************************************************************
 *  main game loop and related stuff                                    *
@@ -207,7 +210,7 @@ void init_game(int port)
 
   my_srand(time(0));
 
-  log("Opening mother connection.");kjl
+  log("Opening mother connection.");
   mother_desc = init_socket(port);
 
   avail_descs = get_avail_descs();
