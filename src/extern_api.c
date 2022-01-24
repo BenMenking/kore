@@ -64,7 +64,7 @@ int getMessage(char *buffer, int size) {
     //printf("timeout\n");
   }
   else {
-    bytes_read = read(pipe_in_fd, buffer, buf_size);
+    bytes_read = read(pipe_in_fd, buffer, size);
   }
 
   return bytes_read;
