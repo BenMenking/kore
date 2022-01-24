@@ -5,7 +5,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "comm.h"
 
 int pipe_out_fd;
 int pipe_in_fd;
